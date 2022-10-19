@@ -8,25 +8,58 @@
     <base href="/">
     <meta name="viewport"
           content="width=device-width, initial-scale=1">
+    <style>
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 5px solid #3498db;
+            width: 50px;
+            height: 50px;
+            -webkit-animation: spin 2s linear infinite;
+            animation: spin 2s linear infinite;
+            position: absolute;
+            left: 0;
+            top: 30%;
+            right: 0;
+            margin-left: auto;
+            margin-right: auto;
+            display: none;
+        }
+
+        /* Safari */
+        @-webkit-keyframes spin {
+            0% {
+                -webkit-transform: rotate(0deg);
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
 </head>
 
 <body style="height: 100%;margin: 0;background-color:#eeeeee4f">
+    <div class="loader"
+         id="loader"></div>
 
     <div style="display: flex;justify-content: space-between;
     align-items: center;height: 100%;margin-bottom: 45px;flex-direction: column;">
-        <div style="display:flex;padding-top: 40px;column-gap: 20px;">
-            <img id="previewImage"
-                 alt="preview image"
-                 hidden
-                 style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-                        height: 40vh;
-                        width: 40vh;
-                        border-radius:4px;
-                        transition: all 0.4s ease-out;
-                        box-shadow: 0px 35px 77px -17px rgb(0 0 0 / 44%);" />
+        <div style="display:flex;padding-top: 40px;justify-content: center;">
+
             <img style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-                        height: 40vh;
-                        width: 40vh;
+                        height: 60vh;
+                        width: 60vh;
                         border-radius:4px;
                         transition: all 0.4s ease-out;
                         box-shadow: 0px 35px 77px -17px rgb(0 0 0 / 44%);"
@@ -75,30 +108,21 @@
     </div>
     <script>
         const uploadElement = document.getElementById("upload");
-        uploadElement.addEventListener('change', handleUploadFile)
-
-
-
-        let selectedFile = {};
+        uploadElement.addEventListener('change', handleUploadFile);
+        const loader = document.getElementById('loader');
+        const image = document.getElementById('analyzedImage');
 
 
         function handleUploadFile(event) {
-
-            console.log(event)
             var file = event.target.files[0];
-
-
-            if (file) {
-                selectedFile = file;
+            if (file)
                 sendFile(file);
-                const image = document.getElementById('previewImage');
-                image.hidden = false;
-                image.src = URL.createObjectURL(file);
-            }
         }
 
         function sendFile(file) {
-
+            loader.style.display = 'block';
+            uploadElement.disabled = true;
+            image.hidden = true;
             const apiUrl = 'https://func-lallemand-demo.azurewebsites.net/imgsegmentation?code=qLyE26WZHuNenVZMSyg7OpWZs7SI7YmuO3I_cYGVK0aVAzFufuik2A==';
             var formData = new FormData();
             formData.append('file', file);
@@ -112,14 +136,21 @@
                     response => response.json()
                 ).then(
                     response => {
-                        const image = document.getElementById('analyzedImage');
                         image.hidden = false;
                         image.src = response.uri;
-                        console.log(response)
+                        uploadElement.disabled = false;
+                        loader.style.display = 'none';
                     }
-                ).catch(
-                    error => console.log(error) // Handle the error response object
-                );
+                ).catch(error => {
+                    loader.style.display = 'none';
+                    uploadElement.disabled = false;
+                    console.log(error);
+
+                });
+        }
+
+        function toogleLoader() {
+
         }
     </script>
 </body>
