@@ -9,12 +9,19 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1">
     <style>
+        .btn:active {
+            transform: scale(0.98);
+            /* Scaling button to 0.98 to its original size */
+            box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+            /* Lowering the shadow */
+        }
+
         .loader {
-            border: 5px solid #f3f3f3;
+            border: 4px solid #f3f3f3;
             border-radius: 50%;
-            border-top: 5px solid #3498db;
-            width: 50px;
-            height: 50px;
+            border-top: 4px solid #3498db;
+            width: 60px;
+            height: 60px;
             -webkit-animation: spin 2s linear infinite;
             animation: spin 2s linear infinite;
             position: absolute;
@@ -64,7 +71,7 @@
                         height: 35vh;
                         width: 35vh;
                         border-radius:4px;
-                        transition: all 0.4s ease-out;
+                        transition: all 0.1s ease-out;
                         box-shadow: 0px 35px 77px -17px rgb(0 0 0 / 44%);"
                  id="analyzedImage"
                  alt="analyzed image"
@@ -86,7 +93,8 @@
                    accept="image/*"
                    hidden />
 
-            <label style="
+            <label class="btn"
+                   style="
                     display: inline-block;
                     background-color: white;
                     padding: 1rem;
@@ -155,9 +163,6 @@
                 });
         }
 
-        function toogleLoader() {
-
-        }
     </script>
 </body>
 
