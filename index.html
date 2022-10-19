@@ -71,19 +71,13 @@
                           d="M8 11a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zm0 1a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM3 6.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z" />
                 </svg></label>
         </div>
-        <div style="margin-bottom: 45px;">
-            <input type="button"
-                   id="submit" />
-        </div>
-
 
     </div>
     <script>
         const uploadElement = document.getElementById("upload");
         uploadElement.addEventListener('change', handleUploadFile)
 
-        const submitBtn = document.getElementById("submit");
-        submitBtn.addEventListener('click', sendFile)
+
 
         let selectedFile = {};
 
@@ -96,18 +90,18 @@
 
             if (file) {
                 selectedFile = file;
+                sendFile(file);
                 const image = document.getElementById('previewImage');
                 image.hidden = false;
                 image.src = URL.createObjectURL(file);
             }
         }
 
-        function sendFile() {
-            if (!selectedFile)
-                return;
-            const apiUrl = 'https://func-lallemand-demo.azurewebsites.net/api/imgsegmentation?code=qLyE26WZHuNenVZMSyg7OpWZs7SI7YmuO3I_cYGVK0aVAzFufuik2A==';
+        function sendFile(file) {
+
+            const apiUrl = 'https://func-lallemand-demo.azurewebsites.net/imgsegmentation?code=qLyE26WZHuNenVZMSyg7OpWZs7SI7YmuO3I_cYGVK0aVAzFufuik2A==';
             var formData = new FormData();
-            formData.append('file', selectedFile);
+            formData.append('file', file);
 
             fetch(apiUrl, {
                 method: 'POST',
