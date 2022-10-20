@@ -185,6 +185,7 @@
 
         async function sendFile(file) {
             loader.style.display = 'block';
+            labels.textContent = '';
             labels.style.display = 'none';
             uploadElement.disabled = true;
             image.hidden = true;
@@ -212,7 +213,7 @@
                                 if (response.uri) {
                                     image.hidden = false;
                                     image.src = response.uri;
-                                    labels.textContent = `Label1 ${response.label1}%   Label2 ${response.label2}%`;
+                                    labels.textContent = `Breadcrumbs ${response.value}%`;
                                     labels.style.display = 'inline';
                                 }
                                 uploadElement.disabled = false;
