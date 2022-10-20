@@ -192,40 +192,50 @@
             var formData = new FormData();
             formData.append('file', file);
 
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: {},
-                body: formData
-            })
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {},
+                    body: formData
+                })
 
-            if (!response.ok) {
+                if (!response.ok) {
+                    labels.textContent = `Something went wrong`;
+                    labels.style.display = 'inline';
+                    loader.style.display = 'none';
+                    uploadElement.disabled = false;
+                }
+                else {
+                    response.json()
+                        .then(
+                            response => {
+                                if (response.uri) {
+                                    image.hidden = false;
+                                    image.src = response.uri;
+                                    labels.textContent = `Label1 ${response.label1}%   Label2 ${response.label2}%`;
+                                    labels.style.display = 'inline';
+                                }
+                                uploadElement.disabled = false;
+                                loader.style.display = 'none';
+                            }
+                        )
+                        .catch(error => {
+                            labels.textContent = `Something went wrong`;
+                            labels.style.display = 'inline';
+                            loader.style.display = 'none';
+                            uploadElement.disabled = false;
+                            console.log(error);
+                        });
+                }
+            } catch (error) {
                 labels.textContent = `Something went wrong`;
                 labels.style.display = 'inline';
                 loader.style.display = 'none';
                 uploadElement.disabled = false;
+                console.log(error);
             }
-            else {
-                response.json()
-                    .then(
-                        response => {
-                            if (response.uri) {
-                                image.hidden = false;
-                                image.src = response.uri;
-                                labels.textContent = `Label1 ${response.label1}%   Label2 ${response.label2}%`;
-                                labels.style.display = 'inline';
-                            }
-                            uploadElement.disabled = false;
-                            loader.style.display = 'none';
-                        }
-                    )
-                    .catch(error => {
-                        labels.textContent = `Something went wrong`;
-                        labels.style.display = 'inline';
-                        loader.style.display = 'none';
-                        uploadElement.disabled = false;
-                        console.log(error);
-                    });
-            }
+
+
 
         }
 
